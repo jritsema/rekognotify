@@ -1,8 +1,11 @@
 {
   "name": "rekognotify",
-  "version": "0.1.0-rc.1",
+  "version": "0.1.0-rc.2",
   "description": "A CLI tool that emails an image if it contains a specific Rekognition label",
   "main": "index.js",
+  "bin": {
+    "rekognotify": "index.js"
+  },
   "scripts": {
     "start": "node .",
     "fmt": "prettier --single-quote --no-semi --write index.js && prettier --single-quote --no-semi --write test/index.js",

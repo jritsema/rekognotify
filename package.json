@@ -1,0 +1,23 @@
+{
+  "name": "rekognotify",
+  "version": "0.1.0-rc.1",
+  "description": "A CLI tool that emails an image if it contains a specific Rekognition label",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "fmt": "prettier --single-quote --no-semi --write index.js && prettier --single-quote --no-semi --write test/index.js",
+    "test": "mocha",
+    "watch": "watch 'npm run fmt && npm test' ."
+  },
+  "keywords": [],
+  "author": "John Ritsema",
+  "license": "MIT",
+  "dependencies": {
+    "nodemailer": "^4.0.1"
+  },
+  "devDependencies": {
+    "prettier": "^1.5.2",
+    "mocha": "^3.4.2",
+    "watch": "^1.0.2"
+  }
+}

@@ -1,5 +1,5 @@
-const assert = require('assert')
-const labelsMatch = require('../.')
+const assert = require('assert');
+const labelsMatch = require('../.');
 
 const labels = JSON.parse(`
 {
@@ -150,23 +150,23 @@ const labels = JSON.parse(`
     }
   ]
 }
-`)
+`);
 
 describe('rekognotify', () => {
   describe('labelsMatch()', () => {
     it('should return false if there is no match', () => {
-      match = labelsMatch(labels, ['foo', 'bar', 'baz'])
-      assert.equal(false, match)
-    })
+      match = labelsMatch(labels, ['foo', 'bar', 'baz']);
+      assert.equal(false, match);
+    });
 
     it('should return true if there is a match', () => {
-      match = labelsMatch(labels, ['Bumper'])
-      assert.equal(true, match)
-    })
+      match = labelsMatch(labels, ['Bumper']);
+      assert.equal(true, match);
+    });
 
     it('should return true if there is more than one match', () => {
-      match = labelsMatch(labels, ['Foo', 'Bumper', 'Freeway'])
-      assert.equal(true, match)
-    })
-  })
-})
+      match = labelsMatch(labels, ['Foo', 'Bumper', 'Freeway']);
+      assert.equal(true, match);
+    });
+  });
+});

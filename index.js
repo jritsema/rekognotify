@@ -1,57 +1,63 @@
-const nodemailer = require('nodemailer')
+'use strict';
+
+const nodemailer = require('nodemailer');
 
 //read bits from stdin
-let labelsString = ''
-process.stdin.setEncoding('utf8')
+let labelsString = '';
+process.stdin.setEncoding('utf8');
 process.stdin.on('readable', () => {
-  let chunk = process.stdin.read()
-  if (chunk !== null) labelsString += chunk
-})
-process.stdin.on('end', work)
+  let chunk = process.stdin.read();
+  if (chunk !== null) labelsString += chunk;
+});
+process.stdin.on('end', work);
 
 function work() {
   //parse labels json
-  let labels
+  let labels;
   try {
-    labels = JSON.parse(labelsString)
+    labels = JSON.parse(labelsString);
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
 
-  let match = true
-  const rawMatchList = process.env.REKOGNOTIFY_MATCH
+  let match = true;
+  const rawMatchList = process.env.REKOGNOTIFY_MATCH;
   if (rawMatchList && rawMatchList.length > 0) {
-    const matchList = rawMatchList.split(',')
+    const matchList = rawMatchList.split(',');
     if (matchList && matchList.length > 0)
-      match = labelsMatch(labels, matchList)
+      match = labelsMatch(labels, matchList);
   }
 
   //proceed to email if there's a match
   if (match) {
     //path to image to be emailed is passed as a cli arg
-    const imageFile = process.argv[2]
+    const imageFile = process.argv[2];
     if (!imageFile) {
-      console.error('missing image file argument')
-      process.exit(1)
+      console.error('missing image file argument');
+      process.exit(1);
     }
 
     //format labels as CSV
-    labelList = []
-    labels.Labels.forEach(l => labelList.push(l.Name))
-    const labelsCsv = labelList.join(', ')
+    let labelList = [];
+    labels.Labels.forEach(l => labelList.push(l.Name));
+    const labelsCsv = labelList.join(', ');
 
     //now finally send the email
-    sendEmail(labelsCsv, imageFile)
+    sendEmail(labelsCsv, imageFile);
+  } else {
+    console.log('no matches');
   }
 }
 
 function labelsMatch(labels, matchList) {
-  for (label of matchList) {
+  for (var i in matchList) {
+    let label = matchList[i];
+    console.log(label);
     if (labels.Labels.find(l => l.Name === label)) {
-      return true
+      return true;
     }
   }
-  return false
+  return false;
 }
 
 function sendEmail(body, file) {
@@ -63,7 +69,7 @@ function sendEmail(body, file) {
       user: process.env.REKOGNOTIFY_USER,
       pass: process.env.REKOGNOTIFY_PASS
     }
-  })
+  });
 
   const mailOptions = {
     from: process.env.REKOGNOTIFY_SENDER_ADDRESS,
@@ -75,12 +81,12 @@ function sendEmail(body, file) {
         path: file
       }
     ]
-  }
+  };
 
   transporter.sendMail(mailOptions, (error, info) => {
-    if (error) return console.log(error)
-    console.log('Message %s sent: %s', info.messageId, info.response)
-  })
+    if (error) return console.log(error);
+    console.log('Message %s sent: %s', info.messageId, info.response);
+  });
 }
 
-module.exports = labelsMatch
+module.exports = labelsMatch;
